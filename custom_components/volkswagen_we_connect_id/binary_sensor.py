@@ -175,5 +175,6 @@ class VolkswagenIDSensor(VolkswagenIDBaseEntity, BinarySensorEntity):
           state = get_object_value(state)
           return state == get_object_value(self.entity_description.on_value)
 
-        except KeyError:
-          return None
+        except (KeyError, ValueError):
+            return None
+

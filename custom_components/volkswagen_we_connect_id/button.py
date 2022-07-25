@@ -51,9 +51,16 @@ class VolkswagenIDToggleACChargeSpeed(ButtonEntity):
     def press(self) -> None:
         """Handle the button press."""
 
-        current_state = get_object_value(
-            self._vehicle.domains["charging"]["chargingSettings"].maxChargeCurrentAC
-        )
+        try:
+            current_state = get_object_value(
+                self._vehicle.domains["charging"]["chargingSettings"].maxChargeCurrentAC
+            )
+        except (KeyError, ValueError):
+            set_ac_charging_speed(
+                self._vehicle.vin.value,
+                self._we_connect,
+                "maximum",
+            )
 
         if current_state == "maximum":
             set_ac_charging_speed(

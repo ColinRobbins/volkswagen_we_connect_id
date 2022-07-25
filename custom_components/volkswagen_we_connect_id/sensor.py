@@ -232,12 +232,16 @@ class VolkswagenIDSensor(VolkswagenIDBaseEntity, SensorEntity):
     def native_value(self) -> StateType:
         """Return the state."""
 
-        state = get_object_value(self.entity_description.value(self.data.domains))
+        try: 
+            state = get_object_value(self.entity_description.value(self.data.domains))
 
-        if self.entity_description.key == "cruisingRangeElectric_mi":
-            state = int(float(state) * 0.62137)
+            if self.entity_description.key == "cruisingRangeElectric_mi":
+                state = int(float(state) * 0.62137)
 
-        if state and self.entity_description.key == "odometer_mi":
-            state = int(float(state) * 0.62137)
+            if state and self.entity_description.key == "odometer_mi":
+                state = int(float(state) * 0.62137)
 
-        return cast(StateType, state)
+            return cast(StateType, state)
+
+        except (KeyError, ValueError):
+            return None

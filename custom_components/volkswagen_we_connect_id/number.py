@@ -103,11 +103,14 @@ class TargetClimateNumber(VolkswagenIDBaseEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the value reported by the number."""
-        targetTemp = self.data.domains["climatisation"][
-            "climatisationSettings"
-        ].targetTemperature_C.value
+        try:
+            targetTemp = self.data.domains["climatisation"][
+                "climatisationSettings"
+            ].targetTemperature_C.value
 
-        return float(targetTemp)
+            return float(targetTemp)
+        except (KeyError, ValueError):
+            return None
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""

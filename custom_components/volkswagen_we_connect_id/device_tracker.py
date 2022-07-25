@@ -70,7 +70,7 @@ class VolkswagenIDSensor(VolkswagenIDBaseEntity, TrackerEntity):
             return get_object_value(
                 self.data.domains["parking"]["parkingPosition"].longitude.value
             )
-        except KeyError:
+        except (KeyError, ValueError):
             return None
 
     @property
